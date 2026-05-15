@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<section class="container">
+    <h1 class="section-title">Your Shopping Cart</h1>
+
+    {% if cart_items %}
+    <div style="display: flex; gap: 2rem; flex-wrap: wrap;">
+        <div style="flex: 2; min-width: 300px;">
+            <table class="cart-table">
+                <thead>
+                    <tr>
+                        <th>Product</th>
+                        <th>Price</th>
+                        <th>Quantity</th>
+                        <th>Subtotal</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in cart_items %}
+                    <tr>
+                        <td style="display: flex; align-items: center; gap: 1rem;">
+                            <div style="width: 60px; height: 60px; background-image: url('{{ item.product.image_url if item.product.image_url and 'http' in item.product.image_url else 'https://images.unsplash.com/photo-1463936575829-25148e1db1b8?w=800&q=80' }}'); background-size: cover; background-position: center; border-radius: 10px;"></div>
+                            <div>
+                                <div style="font-weight: 600;">{{ item.product.name }}</div>
+                                <div style="font-size: 0.875rem; color: var(--text-secondary);">{{ item.product.category_name }}</div>
+                            </div>
+                        </td>
+                        <td style="font-weight: 600;">${{ item.product.price }}</td>
+                        <td>{{ item.quantity }}</td>
+                        <td style="font-weight: 600; color: var(--primary-dark);">${{ "%.2f"|format(item.subtotal) }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        
+        <div style="flex: 1; min-width: 300px;">
+            <div class="cart-summary">
+                <h3>Order Summary</h3>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 1rem; color: var(--text-secondary);">
+                    <span>Subtotal</span>
+                    <span>${{ "%.2f"|format(total) }}</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 1rem; color: var(--text-secondary);">
+                    <span>Shipping</span>
+                    <span>Free</span>
+                </div>
+                <hr style="border: none; border-top: 1px solid var(--border-color); margin: 1.5rem 0;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 2rem; font-size: 1.5rem; font-weight: 700; color: var(--primary-dark);">
+                    <span>Total</span>
+                    <span>${{ "%.2f"|format(total) }}</span>
+                </div>
+                <button class="btn btn-primary" style="width: 100%; font-size: 1.1rem;">Proceed to Checkout</button>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div style="text-align: center; padding: 4rem;">
+        <div style="font-size: 4rem; margin-bottom: 1rem;">🛒</div>
+        <h2 style="margin-bottom: 1rem;">Your cart is empty</h2>
+        <p style="color: var(--text-secondary); margin-bottom: 2rem;">Looks like you haven't added any beautiful plants to your cart yet.</p>
+        <a href="{{ url_for('catalog') }}" class="btn btn-primary">Start Shopping</a>
+    </div>
+    {% endif %}
+</section>
+{% endblock %}

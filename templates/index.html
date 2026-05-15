@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<section class="hero">
+    <div class="hero-content">
+        <h1>Bring Nature Into Your Home</h1>
+        <p>Discover our exclusive collection of vibrant indoor plants, outdoor shrubs, and premium seeds.</p>
+        <a href="{{ url_for('catalog') }}" class="btn btn-primary" style="font-size: 1.2rem; padding: 1rem 2.5rem;">Shop Now</a>
+    </div>
+</section>
+
+<section class="container">
+    <h2 class="section-title">Popular Plants</h2>
+    <div class="product-grid">
+        {% for product in products %}
+        <div class="product-card">
+            <!-- Using a placeholder image with dynamic styling for visual appeal if image_url is missing -->
+            <div class="product-img" style="background-image: url('{{ product.image_url if product.image_url and 'http' in product.image_url else 'https://images.unsplash.com/photo-1463936575829-25148e1db1b8?w=800&q=80' }}'); background-size: cover; background-position: center;"></div>
+            <div class="product-info">
+                <div class="product-category">{{ product.category_name }}</div>
+                <h3 class="product-title">{{ product.name }}</h3>
+                <div class="product-price">${{ product.price }}</div>
+                <div class="product-actions">
+                    <a href="{{ url_for('product', product_id=product.product_id) }}" class="btn btn-outline">View Details</a>
+                    <form action="{{ url_for('add_to_cart', product_id=product.product_id) }}" method="POST" style="display:inline;">
+                        <input type="hidden" name="quantity" value="1">
+                        <button type="submit" class="btn btn-primary">+</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <p style="text-align:center; width: 100%;">No products found. Please load the database.</p>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}
