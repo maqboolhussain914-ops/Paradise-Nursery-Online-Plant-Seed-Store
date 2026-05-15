@@ -1,0 +1,51 @@
+product_id,name,description,price,stock_quantity,category_id,image_url,created_at
+1,Ficus 1,A wonderful addition to your home or garden.,39.53,156,2,http://example.com/images/plant_1.jpg,2026-04-07 00:00:00
+2,Basil 2,A wonderful addition to your home or garden.,16.85,31,4,http://example.com/images/plant_2.jpg,2025-11-10 00:00:00
+3,Snake Plant 3,A wonderful addition to your home or garden.,20.57,165,5,http://example.com/images/plant_3.jpg,2026-02-05 00:00:00
+4,Snake Plant 4,A wonderful addition to your home or garden.,36.71,32,4,http://example.com/images/plant_4.jpg,2025-03-25 00:00:00
+5,Orchid 5,A wonderful addition to your home or garden.,47.2,85,3,http://example.com/images/plant_5.jpg,2025-12-04 00:00:00
+6,Rose 6,A wonderful addition to your home or garden.,15.68,111,2,http://example.com/images/plant_6.jpg,2025-10-14 00:00:00
+7,Cactus 7,A wonderful addition to your home or garden.,25.52,136,5,http://example.com/images/plant_7.jpg,2025-05-16 00:00:00
+8,Rose 8,A wonderful addition to your home or garden.,43.21,94,5,http://example.com/images/plant_8.jpg,2025-12-17 00:00:00
+9,Mint 9,A wonderful addition to your home or garden.,43.1,77,1,http://example.com/images/plant_9.jpg,2025-05-02 00:00:00
+10,Tulip 10,A wonderful addition to your home or garden.,33.13,106,3,http://example.com/images/plant_10.jpg,2026-04-16 00:00:00
+11,Ficus 11,A wonderful addition to your home or garden.,37.88,124,2,http://example.com/images/plant_11.jpg,2025-08-14 00:00:00
+12,Aloe Vera 12,A wonderful addition to your home or garden.,6.73,12,1,http://example.com/images/plant_12.jpg,2025-01-07 00:00:00
+13,Lavender 13,A wonderful addition to your home or garden.,45.75,158,1,http://example.com/images/plant_13.jpg,2026-03-21 00:00:00
+14,Ficus 14,A wonderful addition to your home or garden.,35.75,195,4,http://example.com/images/plant_14.jpg,2026-01-17 00:00:00
+15,Ficus 15,A wonderful addition to your home or garden.,13.55,191,4,http://example.com/images/plant_15.jpg,2026-03-07 00:00:00
+16,Lavender 16,A wonderful addition to your home or garden.,11.64,36,2,http://example.com/images/plant_16.jpg,2025-02-11 00:00:00
+17,Mint 17,A wonderful addition to your home or garden.,38.56,76,3,http://example.com/images/plant_17.jpg,2025-05-30 00:00:00
+18,Ficus 18,A wonderful addition to your home or garden.,6.48,55,3,http://example.com/images/plant_18.jpg,2025-01-15 00:00:00
+19,Ficus 19,A wonderful addition to your home or garden.,18.12,172,1,http://example.com/images/plant_19.jpg,2026-03-26 00:00:00
+20,Tulip 20,A wonderful addition to your home or garden.,8.06,113,1,http://example.com/images/plant_20.jpg,2025-01-14 00:00:00
+21,Fern 21,A wonderful addition to your home or garden.,20.34,103,1,http://example.com/images/plant_21.jpg,2025-11-08 00:00:00
+22,Lavender 22,A wonderful addition to your home or garden.,13.17,132,3,http://example.com/images/plant_22.jpg,2025-07-19 00:00:00
+23,Ficus 23,A wonderful addition to your home or garden.,18.95,52,4,http://example.com/images/plant_23.jpg,2025-12-14 00:00:00
+24,Tulip 24,A wonderful addition to your home or garden.,16.73,47,2,http://example.com/images/plant_24.jpg,2026-03-05 00:00:00
+25,Rose 25,A wonderful addition to your home or garden.,41.9,195,2,http://example.com/images/plant_25.jpg,2025-02-05 00:00:00
+26,Ficus 26,A wonderful addition to your home or garden.,46.18,180,5,http://example.com/images/plant_26.jpg,2025-10-26 00:00:00
+27,Rose 27,A wonderful addition to your home or garden.,40.47,154,5,http://example.com/images/plant_27.jpg,2026-01-27 00:00:00
+28,Monstera 28,A wonderful addition to your home or garden.,26.94,187,4,http://example.com/images/plant_28.jpg,2026-01-25 00:00:00
+29,Fern 29,A wonderful addition to your home or garden.,44.79,120,5,http://example.com/images/plant_29.jpg,2026-03-18 00:00:00
+30,Rose 30,A wonderful addition to your home or garden.,43.33,110,3,http://example.com/images/plant_30.jpg,2025-07-07 00:00:00
+31,Aloe Vera 31,A wonderful addition to your home or garden.,21.87,59,1,http://example.com/images/plant_31.jpg,2025-09-20 00:00:00
+32,Ficus 32,A wonderful addition to your home or garden.,40.31,163,1,http://example.com/images/plant_32.jpg,2025-08-05 00:00:00
+33,Lavender 33,A wonderful addition to your home or garden.,31.15,96,4,http://example.com/images/plant_33.jpg,2025-07-03 00:00:00
+34,Cactus 34,A wonderful addition to your home or garden.,47.74,76,4,http://example.com/images/plant_34.jpg,2025-11-04 00:00:00
+35,Basil 35,A wonderful addition to your home or garden.,13.51,173,1,http://example.com/images/plant_35.jpg,2026-03-20 00:00:00
+36,Cactus 36,A wonderful addition to your home or garden.,17.33,44,1,http://example.com/images/plant_36.jpg,2025-03-02 00:00:00
+37,Lavender 37,A wonderful addition to your home or garden.,37.43,159,1,http://example.com/images/plant_37.jpg,2025-07-28 00:00:00
+38,Monstera 38,A wonderful addition to your home or garden.,46.38,75,5,http://example.com/images/plant_38.jpg,2026-04-15 00:00:00
+39,Tulip 39,A wonderful addition to your home or garden.,26.31,80,4,http://example.com/images/plant_39.jpg,2026-04-23 00:00:00
+40,Snake Plant 40,A wonderful addition to your home or garden.,34.09,190,4,http://example.com/images/plant_40.jpg,2025-01-10 00:00:00
+41,Cactus 41,A wonderful addition to your home or garden.,39.82,112,3,http://example.com/images/plant_41.jpg,2026-01-15 00:00:00
+42,Mint 42,A wonderful addition to your home or garden.,9.67,147,3,http://example.com/images/plant_42.jpg,2025-11-21 00:00:00
+43,Snake Plant 43,A wonderful addition to your home or garden.,29.18,35,5,http://example.com/images/plant_43.jpg,2026-02-19 00:00:00
+44,Ficus 44,A wonderful addition to your home or garden.,20.7,53,1,http://example.com/images/plant_44.jpg,2025-06-14 00:00:00
+45,Ficus 45,A wonderful addition to your home or garden.,45.21,167,2,http://example.com/images/plant_45.jpg,2025-10-01 00:00:00
+46,Orchid 46,A wonderful addition to your home or garden.,27.1,188,3,http://example.com/images/plant_46.jpg,2025-10-30 00:00:00
+47,Mint 47,A wonderful addition to your home or garden.,13.05,82,1,http://example.com/images/plant_47.jpg,2025-03-13 00:00:00
+48,Orchid 48,A wonderful addition to your home or garden.,39.66,152,3,http://example.com/images/plant_48.jpg,2026-02-03 00:00:00
+49,Orchid 49,A wonderful addition to your home or garden.,44.7,60,2,http://example.com/images/plant_49.jpg,2025-05-10 00:00:00
+50,Snake Plant 50,A wonderful addition to your home or garden.,15.81,129,2,http://example.com/images/plant_50.jpg,2025-07-27 00:00:00
