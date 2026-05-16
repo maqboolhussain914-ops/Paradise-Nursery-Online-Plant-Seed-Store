@@ -51,7 +51,12 @@
                     <span>Total</span>
                     <span>${{ "%.2f"|format(total) }}</span>
                 </div>
-                <button class="btn btn-primary" style="width: 100%; font-size: 1.1rem;">Proceed to Checkout</button>
+                <div style="display: flex; gap: 1rem;">
+                    <form action="{{ url_for('clear_cart') }}" method="POST" style="flex: 1;">
+                        <button type="submit" class="btn btn-outline" style="width: 100%; font-size: 1rem;">Clear Cart</button>
+                    </form>
+                    <button class="btn btn-primary" style="flex: 2; font-size: 1rem;">Proceed to Checkout</button>
+                </div>
             </div>
         </div>
     </div>

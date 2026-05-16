@@ -73,6 +73,12 @@ def add_to_cart(product_id):
     flash("Product added to cart!", "success")
     return redirect(url_for('cart'))
 
+@app.route('/clear_cart', methods=['POST'])
+def clear_cart():
+    session.pop('cart', None)
+    flash("Your cart has been cleared.", "success")
+    return redirect(url_for('cart'))
+
 # --- Admin Routes & Logic ---
 
 def admin_required(f):
