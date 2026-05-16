@@ -109,7 +109,18 @@
         <main class="admin-content">
             <header class="admin-header">
                 <h2>{% block header %}{% endblock %}</h2>
-                {% block header_actions %}{% endblock %}
+                <div style="display: flex; align-items: center; gap: 1rem;">
+                    {% block header_actions %}{% endblock %}
+                    
+                    <!-- 3-Dot Toggle Menu -->
+                    <div class="dropdown">
+                        <button class="kebab-menu" style="background: white; box-shadow: var(--shadow-sm); width: 40px; height: 40px;">⋮</button>
+                        <div class="dropdown-content">
+                            <a href="{{ url_for('index') }}">View Store Dashboard</a>
+                            <a href="{{ url_for('admin_logout') }}">Logout Admin</a>
+                        </div>
+                    </div>
+                </div>
             </header>
             {% block content %}{% endblock %}
         </main>

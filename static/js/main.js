@@ -30,4 +30,27 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
+
+    // Dropdown / Kebab Menu Toggle
+    const dropdowns = document.querySelectorAll('.dropdown');
+    dropdowns.forEach(dropdown => {
+        const btn = dropdown.querySelector('.kebab-menu');
+        const content = dropdown.querySelector('.dropdown-content');
+        
+        if (btn && content) {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                // Close all other dropdowns first
+                document.querySelectorAll('.dropdown-content.show').forEach(c => {
+                    if (c !== content) c.classList.remove('show');
+                });
+                content.classList.toggle('show');
+            });
+        }
+    });
+
+    // Close dropdowns when clicking outside
+    document.addEventListener('click', () => {
+        document.querySelectorAll('.dropdown-content.show').forEach(c => c.classList.remove('show'));
+    });
 });

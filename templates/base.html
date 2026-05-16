@@ -17,6 +17,19 @@
             <a href="{{ url_for('cart') }}" class="btn btn-primary" style="color:white; padding: 0.5rem 1rem;">
                 🛒 Cart ({{ session.get('cart', {}) | length }})
             </a>
+            
+            <!-- 3-Dot Toggle Menu -->
+            <div class="dropdown">
+                <button class="kebab-menu">⋮</button>
+                <div class="dropdown-content">
+                    {% if session.get('is_admin') %}
+                        <a href="{{ url_for('admin_dashboard') }}">Admin Dashboard</a>
+                        <a href="{{ url_for('admin_logout') }}">Logout Admin</a>
+                    {% else %}
+                        <a href="{{ url_for('admin_login') }}">Admin Login</a>
+                    {% endif %}
+                </div>
+            </div>
         </div>
     </nav>
 
