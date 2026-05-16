@@ -108,7 +108,15 @@ def admin_logout():
 @admin_required
 def admin_dashboard():
     stats = db.get_dashboard_stats()
-    return render_template('admin/dashboard.html', stats=stats)
+    low_stock = db.get_low_stock_products(threshold=15)
+    recent_orders = db.get_recent_orders(limit=5)
+    sales_data = db.get_sales_by_category()
+    
+    # Prepare data for Chart.js
+    chart_labels = [row['label'] for row in sales_data] if sales_data else []
+    chart_values = [row['data'] for row in sales_data] if sales_data else []
+    
+    return render_template('admin/dashboard.html', stats=stats, low_stock=low_stock, recent_orders=recent_orders, chart_labels=chart_labels, chart_values=chart_values)
 
 @app.route('/admin/products')
 @admin_required
@@ -176,6 +184,66 @@ def admin_delete_product(product_id):
 def admin_orders():
     orders = db.get_all_orders()
     return render_template('admin/orders.html', orders=orders)
+
+@app.route('/admin/orders/update/<int:order_id>', methods=['POST'])
+@admin_required
+def admin_update_order_status(order_id):
+    status = request.form.get('status')
+    if db.update_order_status(order_id, status):
+        flash('Order status updated successfully.', 'success')
+    else:
+        flash('Error updating order status.', 'error')
+    return redirect(url_for('admin_orders'))
+
+@app.route('/admin/categories')
+@admin_required
+def admin_categories():
+    categories = db.get_all_categories()
+    return render_template('admin/categories.html', categories=categories)
+
+@app.route('/admin/categories/add', methods=['GET', 'POST'])
+@admin_required
+def admin_add_category():
+    if request.method == 'POST':
+        name = request.form.get('name')
+        description = request.form.get('description')
+        if db.add_category(name, description):
+            flash('Category added successfully!', 'success')
+            return redirect(url_for('admin_categories'))
+        else:
+            flash('Error adding category.', 'error')
+    return render_template('admin/category_form.html', category=None)
+
+@app.route('/admin/categories/edit/<int:category_id>', methods=['GET', 'POST'])
+@admin_required
+def admin_edit_category(category_id):
+    # Quick fix: fetch all and find the one. For a real app, add a specific DB function.
+    categories = db.get_all_categories()
+    category = next((c for c in categories if c['category_id'] == category_id), None)
+    
+    if not category:
+        flash('Category not found.', 'error')
+        return redirect(url_for('admin_categories'))
+        
+    if request.method == 'POST':
+        name = request.form.get('name')
+        description = request.form.get('description')
+        if db.update_category(category_id, name, description):
+            flash('Category updated successfully!', 'success')
+            return redirect(url_for('admin_categories'))
+        else:
+            flash('Error updating category.', 'error')
+            
+    return render_template('admin/category_form.html', category=category)
+
+@app.route('/admin/categories/delete/<int:category_id>', methods=['POST'])
+@admin_required
+def admin_delete_category(category_id):
+    if db.delete_category(category_id):
+        flash('Category deleted successfully.', 'success')
+    else:
+        flash('Error deleting category (make sure no products belong to it).', 'error')
+    return redirect(url_for('admin_categories'))
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000)

@@ -144,3 +144,113 @@ def get_dashboard_stats():
     cursor.close()
     conn.close()
     return stats
+
+# --- Advanced Admin Operations ---
+
+def add_category(category_name, description):
+    conn = get_db_connection()
+    if not conn: return False
+    cursor = conn.cursor()
+    try:
+        cursor.execute("SELECT MAX(category_id) FROM categories")
+        result = cursor.fetchone()
+        next_id = 1 if result[0] is None else result[0] + 1
+        
+        cursor.execute("INSERT INTO categories (category_id, category_name, description) VALUES (%s, %s, %s)", (next_id, category_name, description))
+        conn.commit()
+        return True
+    except Error as e:
+        print(f"Error adding category: {e}")
+        return False
+    finally:
+        cursor.close()
+        conn.close()
+
+def update_category(category_id, category_name, description):
+    conn = get_db_connection()
+    if not conn: return False
+    cursor = conn.cursor()
+    try:
+        cursor.execute("UPDATE categories SET category_name=%s, description=%s WHERE category_id=%s", (category_name, description, category_id))
+        conn.commit()
+        return True
+    except Error as e:
+        print(f"Error updating category: {e}")
+        return False
+    finally:
+        cursor.close()
+        conn.close()
+
+def delete_category(category_id):
+    conn = get_db_connection()
+    if not conn: return False
+    cursor = conn.cursor()
+    try:
+        cursor.execute("DELETE FROM categories WHERE category_id=%s", (category_id,))
+        conn.commit()
+        return True
+    except Error as e:
+        print(f"Error deleting category: {e}")
+        return False
+    finally:
+        cursor.close()
+        conn.close()
+
+def update_order_status(order_id, status):
+    conn = get_db_connection()
+    if not conn: return False
+    cursor = conn.cursor()
+    try:
+        cursor.execute("UPDATE orders SET status=%s WHERE order_id=%s", (status, order_id))
+        conn.commit()
+        return True
+    except Error as e:
+        print(f"Error updating order status: {e}")
+        return False
+    finally:
+        cursor.close()
+        conn.close()
+
+def get_low_stock_products(threshold=15):
+    conn = get_db_connection()
+    if not conn: return []
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute("SELECT p.*, c.category_name FROM products p JOIN categories c ON p.category_id = c.category_id WHERE p.stock_quantity <= %s ORDER BY p.stock_quantity ASC", (threshold,))
+    products = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    return products
+
+def get_recent_orders(limit=5):
+    conn = get_db_connection()
+    if not conn: return []
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute("""
+        SELECT o.*, u.first_name, u.last_name 
+        FROM orders o 
+        JOIN users u ON o.user_id = u.user_id 
+        ORDER BY o.order_date DESC LIMIT %s
+    """, (limit,))
+    orders = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    return orders
+
+def get_sales_by_category():
+    conn = get_db_connection()
+    if not conn: return []
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute("""
+        SELECT c.category_name as label, SUM(oi.quantity * oi.price_at_purchase) as data
+        FROM order_items oi
+        JOIN products p ON oi.product_id = p.product_id
+        JOIN categories c ON p.category_id = c.category_id
+        GROUP BY c.category_id
+    """)
+    data = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    # Convert Decimals to float for JSON serialization
+    for row in data:
+        row['data'] = float(row['data'])
+    return data
