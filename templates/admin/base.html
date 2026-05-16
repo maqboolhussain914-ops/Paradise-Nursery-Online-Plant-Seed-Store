@@ -50,8 +50,10 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 2rem;
-            padding-bottom: 1rem;
-            border-bottom: 1px solid var(--border-color);
+            padding: 1.5rem 2rem;
+            background: white;
+            border-radius: 15px;
+            box-shadow: var(--shadow-sm);
         }
         .stat-card {
             background: white;
@@ -112,9 +114,16 @@
                 <div style="display: flex; align-items: center; gap: 1rem;">
                     {% block header_actions %}{% endblock %}
                     
+                    <div style="display: flex; align-items: center; gap: 0.5rem; border-left: 1px solid var(--border-color); padding-left: 1rem; margin-left: 1rem;">
+                        <div style="width: 35px; height: 35px; border-radius: 50%; background: var(--primary-light); color: white; display: flex; align-items: center; justify-content: center; font-weight: bold;">
+                            A
+                        </div>
+                        <span style="font-weight: 600; color: var(--text-primary);">Admin User</span>
+                    </div>
+
                     <!-- 3-Dot Toggle Menu -->
                     <div class="dropdown">
-                        <button class="kebab-menu" style="background: white; box-shadow: var(--shadow-sm); width: 40px; height: 40px;">⋮</button>
+                        <button class="kebab-menu" style="background: var(--bg-color); width: 40px; height: 40px;">⋮</button>
                         <div class="dropdown-content">
                             <a href="{{ url_for('index') }}">View Store Dashboard</a>
                             <a href="{{ url_for('admin_logout') }}">Logout Admin</a>

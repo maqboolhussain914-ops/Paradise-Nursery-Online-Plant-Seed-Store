@@ -1,9 +1,12 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<section class="container">
-    <h1 class="section-title">Our Plant Catalog</h1>
-    
+<div class="page-header" style="background: linear-gradient(rgba(46, 125, 50, 0.8), rgba(0, 80, 5, 0.8)), url('https://images.unsplash.com/photo-1416879598555-27a3c3e2db78?w=1600&q=80') center/cover; padding: 4rem 2rem; text-align: center; color: white; margin-bottom: 2rem;">
+    <h1 style="font-size: 3rem; margin-bottom: 1rem; color: white;">Our Plant Catalog</h1>
+    <p style="font-size: 1.2rem; opacity: 0.9;">Find the perfect addition to your home or garden</p>
+</div>
+
+<section class="container" style="padding-top: 1rem;">
     <div class="category-filter">
         <a href="{{ url_for('catalog') }}" class="filter-btn {% if not active_category %}active{% endif %}">All</a>
         {% for cat in categories %}
