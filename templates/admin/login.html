@@ -1,0 +1,23 @@
+{% extends 'admin/base.html' %}
+
+{% block login_content %}
+<div style="min-height: 100vh; display: flex; align-items: center; justify-content: center; background: var(--bg-color);">
+    <div style="background: white; padding: 3rem; border-radius: 20px; box-shadow: var(--shadow-lg); width: 100%; max-width: 400px; text-align: center;">
+        <h2 style="color: var(--primary-dark); margin-bottom: 2rem;">Admin Login</h2>
+        <form method="POST" action="{{ url_for('admin_login') }}">
+            <div class="form-group" style="text-align: left;">
+                <label style="font-weight: 600; color: var(--text-secondary); margin-bottom: 0.5rem; display: block;">Username</label>
+                <input type="text" name="username" class="form-control" required placeholder="Enter admin">
+            </div>
+            <div class="form-group" style="text-align: left; margin-bottom: 2rem;">
+                <label style="font-weight: 600; color: var(--text-secondary); margin-bottom: 0.5rem; display: block;">Password</label>
+                <input type="password" name="password" class="form-control" required placeholder="Enter admin123">
+            </div>
+            <button type="submit" class="btn btn-primary" style="width: 100%;">Login to Dashboard</button>
+        </form>
+        <div style="margin-top: 2rem;">
+            <a href="{{ url_for('index') }}" style="color: var(--primary-color);">← Back to Store</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
