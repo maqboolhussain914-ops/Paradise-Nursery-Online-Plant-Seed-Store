@@ -1,72 +1,81 @@
 {% extends 'base.html' %}
+{% block title %}Shopping Cart – Paradise Nursery{% endblock %}
 
 {% block content %}
-<section class="container">
+<section class="container" id="cart-page">
     <h1 class="section-title">Your Shopping Cart</h1>
 
     {% if cart_items %}
-    <div style="display: flex; gap: 2rem; flex-wrap: wrap;">
+    <div style="display: flex; gap: 2.5rem; flex-wrap: wrap; align-items: flex-start;">
+        <!-- Cart Items Table -->
         <div style="flex: 2; min-width: 300px;">
-            <table class="cart-table">
+            <table class="cart-table" id="cart-table">
                 <thead>
                     <tr>
                         <th>Product</th>
                         <th>Price</th>
-                        <th>Quantity</th>
+                        <th>Qty</th>
                         <th>Subtotal</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for item in cart_items %}
-                    <tr>
+                    <tr id="cart-row-{{ item.product.product_id }}">
                         <td style="display: flex; align-items: center; gap: 1rem;">
-                            <div style="width: 60px; height: 60px; background-image: url('{{ item.product.image_url if item.product.image_url and 'http' in item.product.image_url else 'https://images.unsplash.com/photo-1463936575829-25148e1db1b8?w=800&q=80' }}'); background-size: cover; background-position: center; border-radius: 10px;"></div>
+                            <div style="width: 56px; height: 56px; background-image: url('{{ item.product.image_url if item.product.image_url and 'http' in item.product.image_url else 'https://images.unsplash.com/photo-1463936575829-25148e1db1b8?w=800&q=80' }}'); background-size: cover; background-position: center; border-radius: 12px; flex-shrink: 0; box-shadow: var(--shadow-sm);"></div>
                             <div>
-                                <div style="font-weight: 600;">{{ item.product.name }}</div>
-                                <div style="font-size: 0.875rem; color: var(--text-secondary);">{{ item.product.category_name }}</div>
+                                <div style="font-weight: 600; font-size: 0.95rem;">{{ item.product.name }}</div>
+                                <div style="font-size: 0.8rem; color: var(--text-secondary);">{{ item.product.category_name }}</div>
                             </div>
                         </td>
-                        <td style="font-weight: 600;">${{ item.product.price }}</td>
-                        <td>{{ item.quantity }}</td>
-                        <td style="font-weight: 600; color: var(--primary-dark);">${{ "%.2f"|format(item.subtotal) }}</td>
+                        <td style="font-weight: 600;">${{ "%.2f"|format(item.product.price) }}</td>
+                        <td>
+                            <span style="background: rgba(46,125,50,0.08); padding: 0.3rem 0.8rem; border-radius: 20px; font-weight: 600; font-size: 0.9rem;">{{ item.quantity }}</span>
+                        </td>
+                        <td style="font-weight: 700; color: var(--primary-dark);">${{ "%.2f"|format(item.subtotal) }}</td>
                     </tr>
                     {% endfor %}
                 </tbody>
             </table>
         </div>
         
-        <div style="flex: 1; min-width: 300px;">
-            <div class="cart-summary">
+        <!-- Order Summary -->
+        <div style="flex: 1; min-width: 280px;">
+            <div class="cart-summary" id="cart-summary">
                 <h3>Order Summary</h3>
-                <div style="display: flex; justify-content: space-between; margin-bottom: 1rem; color: var(--text-secondary);">
-                    <span>Subtotal</span>
-                    <span>${{ "%.2f"|format(total) }}</span>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.8rem; color: var(--text-secondary); font-size: 0.95rem;">
+                    <span>Subtotal ({{ cart_items|length }} items)</span>
+                    <span style="font-weight: 600;">${{ "%.2f"|format(total) }}</span>
                 </div>
-                <div style="display: flex; justify-content: space-between; margin-bottom: 1rem; color: var(--text-secondary);">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.8rem; color: var(--text-secondary); font-size: 0.95rem;">
                     <span>Shipping</span>
-                    <span>Free</span>
+                    <span style="color: var(--primary-color); font-weight: 600;">Free ✓</span>
                 </div>
-                <hr style="border: none; border-top: 1px solid var(--border-color); margin: 1.5rem 0;">
-                <div style="display: flex; justify-content: space-between; margin-bottom: 2rem; font-size: 1.5rem; font-weight: 700; color: var(--primary-dark);">
+                <hr style="border: none; border-top: 2px solid var(--border-color); margin: 1.2rem 0;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 2rem; font-size: 1.4rem; font-weight: 800;">
                     <span>Total</span>
-                    <span>${{ "%.2f"|format(total) }}</span>
+                    <span class="product-price">${{ "%.2f"|format(total) }}</span>
                 </div>
-                <div style="display: flex; gap: 1rem;">
-                    <form action="{{ url_for('clear_cart') }}" method="POST" style="flex: 1;">
-                        <button type="submit" class="btn btn-outline" style="width: 100%; font-size: 1rem;">Clear Cart</button>
-                    </form>
-                    <button class="btn btn-primary" style="flex: 2; font-size: 1rem;">Proceed to Checkout</button>
-                </div>
+                <button class="btn btn-primary" id="checkout-btn" style="width: 100%; font-size: 1rem; padding: 0.9rem; margin-bottom: 0.8rem;">Proceed to Checkout</button>
+                <form action="{{ url_for('clear_cart') }}" method="POST">
+                    <button type="submit" class="btn btn-outline" id="clear-cart-btn" style="width: 100%; font-size: 0.9rem; padding: 0.7rem;">Clear Cart</button>
+                </form>
             </div>
         </div>
     </div>
     {% else %}
-    <div style="text-align: center; padding: 4rem;">
-        <div style="font-size: 4rem; margin-bottom: 1rem;">🛒</div>
-        <h2 style="margin-bottom: 1rem;">Your cart is empty</h2>
-        <p style="color: var(--text-secondary); margin-bottom: 2rem;">Looks like you haven't added any beautiful plants to your cart yet.</p>
-        <a href="{{ url_for('catalog') }}" class="btn btn-primary">Start Shopping</a>
+    <div style="text-align: center; padding: 5rem 2rem;" id="empty-cart">
+        <div style="font-size: 4rem; margin-bottom: 1rem; animation: float 3s ease-in-out infinite;">🛒</div>
+        <h2 style="margin-bottom: 0.8rem; font-weight: 700;">Your cart is empty</h2>
+        <p style="color: var(--text-secondary); margin-bottom: 2rem; font-size: 1.05rem;">Looks like you haven't added any beautiful plants yet.</p>
+        <a href="{{ url_for('catalog') }}" class="btn btn-primary" id="start-shopping-btn" style="font-size: 1rem; padding: 0.9rem 2.5rem;">🌿 Start Shopping</a>
     </div>
+    <style>
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-12px); }
+        }
+    </style>
     {% endif %}
 </section>
 {% endblock %}

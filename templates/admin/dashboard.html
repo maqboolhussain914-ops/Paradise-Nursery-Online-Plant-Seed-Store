@@ -3,55 +3,63 @@
 {% block header %}Dashboard Overview{% endblock %}
 
 {% block content %}
-<div style="display: flex; gap: 2rem; margin-bottom: 3rem;">
+<!-- Stat Cards -->
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5rem; margin-bottom: 2.5rem;">
     <div class="stat-card">
-        <h3 style="color: var(--text-secondary); font-size: 1rem; margin-bottom: 0.5rem;">Total Products</h3>
+        <h3 style="color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.5px;">Total Products</h3>
         <div class="stat-value">{{ stats.products }}</div>
     </div>
     <div class="stat-card">
-        <h3 style="color: var(--text-secondary); font-size: 1rem; margin-bottom: 0.5rem;">Total Orders</h3>
+        <h3 style="color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.5px;">Total Orders</h3>
         <div class="stat-value">{{ stats.orders }}</div>
     </div>
     <div class="stat-card">
-        <h3 style="color: var(--text-secondary); font-size: 1rem; margin-bottom: 0.5rem;">Total Revenue</h3>
+        <h3 style="color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.5px;">Total Revenue</h3>
         <div class="stat-value">${{ "%.2f"|format(stats.revenue) }}</div>
     </div>
 </div>
 
-<div style="display: flex; gap: 2rem; margin-bottom: 3rem; flex-wrap: wrap;">
-    <div style="flex: 2; min-width: 400px; background: white; padding: 2rem; border-radius: 15px; box-shadow: var(--shadow-sm);">
-        <h3 style="margin-bottom: 1rem; color: var(--primary-dark);">Sales by Category</h3>
+<!-- Charts & Alerts -->
+<div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1.5rem; margin-bottom: 2rem;">
+    <!-- Sales Chart -->
+    <div style="background: white; padding: 2rem; border-radius: var(--radius-md); box-shadow: var(--shadow-sm); border: 1px solid var(--border-color);">
+        <h3 style="margin-bottom: 1.2rem; font-weight: 700; font-size: 1.1rem;">📈 Sales by Category</h3>
         <canvas id="salesChart"></canvas>
     </div>
-    <div style="flex: 1; min-width: 300px; display: flex; flex-direction: column; gap: 1.5rem;">
-        <div style="background: white; padding: 1.5rem; border-radius: 15px; box-shadow: var(--shadow-sm);">
-            <h3 style="margin-bottom: 1rem; color: #ef4444;">Low Stock Alerts</h3>
+    
+    <!-- Side Panel -->
+    <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+        <!-- Low Stock -->
+        <div style="background: white; padding: 1.5rem; border-radius: var(--radius-md); box-shadow: var(--shadow-sm); border: 1px solid var(--border-color); flex: 1;">
+            <h3 style="margin-bottom: 1rem; font-weight: 700; font-size: 1rem; color: #ef4444; display: flex; align-items: center; gap: 0.4rem;">⚠️ Low Stock Alerts</h3>
             {% if low_stock %}
                 <ul style="list-style: none; padding: 0;">
                 {% for item in low_stock %}
-                    <li style="display: flex; justify-content: space-between; padding: 0.5rem 0; border-bottom: 1px solid var(--border-color);">
-                        <span>{{ item.name }}</span>
-                        <span style="color: #ef4444; font-weight: bold;">{{ item.stock_quantity }} left</span>
+                    <li style="display: flex; justify-content: space-between; padding: 0.6rem 0; border-bottom: 1px solid var(--border-color); align-items: center;">
+                        <span style="font-weight: 500; font-size: 0.9rem;">{{ item.name }}</span>
+                        <span style="color: #ef4444; font-weight: 700; font-size: 0.85rem; background: rgba(239,68,68,0.08); padding: 0.2rem 0.6rem; border-radius: 20px;">{{ item.stock_quantity }} left</span>
                     </li>
                 {% endfor %}
                 </ul>
             {% else %}
-                <p style="color: var(--text-secondary);">Inventory looks good!</p>
+                <p style="color: var(--text-secondary); font-size: 0.9rem;">✅ Inventory looks healthy!</p>
             {% endif %}
         </div>
-        <div style="background: white; padding: 1.5rem; border-radius: 15px; box-shadow: var(--shadow-sm);">
-            <h3 style="margin-bottom: 1rem; color: var(--primary-dark);">Recent Orders</h3>
+        
+        <!-- Recent Orders -->
+        <div style="background: white; padding: 1.5rem; border-radius: var(--radius-md); box-shadow: var(--shadow-sm); border: 1px solid var(--border-color); flex: 1;">
+            <h3 style="margin-bottom: 1rem; font-weight: 700; font-size: 1rem;">📦 Recent Orders</h3>
             {% if recent_orders %}
                 <ul style="list-style: none; padding: 0;">
                 {% for order in recent_orders %}
-                    <li style="display: flex; justify-content: space-between; padding: 0.5rem 0; border-bottom: 1px solid var(--border-color);">
-                        <span>#{{ order.order_id }} - {{ order.first_name }}</span>
-                        <span style="font-weight: bold;">${{ "%.2f"|format(order.total_amount) }}</span>
+                    <li style="display: flex; justify-content: space-between; padding: 0.6rem 0; border-bottom: 1px solid var(--border-color); align-items: center;">
+                        <span style="font-size: 0.9rem;"><strong>#{{ order.order_id }}</strong> – {{ order.first_name }}</span>
+                        <span style="font-weight: 700; font-size: 0.9rem; color: var(--primary-dark);">${{ "%.2f"|format(order.total_amount) }}</span>
                     </li>
                 {% endfor %}
                 </ul>
             {% else %}
-                <p style="color: var(--text-secondary);">No recent orders.</p>
+                <p style="color: var(--text-secondary); font-size: 0.9rem;">No recent orders.</p>
             {% endif %}
         </div>
     </div>
@@ -64,19 +72,41 @@
         data: {
             labels: {{ chart_labels | safe }},
             datasets: [{
-                label: 'Total Revenue ($)',
+                label: 'Revenue ($)',
                 data: {{ chart_values | safe }},
-                backgroundColor: 'rgba(46, 125, 50, 0.6)',
-                borderColor: 'rgba(46, 125, 50, 1)',
-                borderWidth: 1,
-                borderRadius: 5
+                backgroundColor: [
+                    'rgba(46, 125, 50, 0.7)',
+                    'rgba(96, 173, 94, 0.7)',
+                    'rgba(139, 195, 74, 0.7)',
+                    'rgba(251, 192, 45, 0.7)',
+                    'rgba(255, 152, 0, 0.7)',
+                ],
+                borderColor: [
+                    'rgba(46, 125, 50, 1)',
+                    'rgba(96, 173, 94, 1)',
+                    'rgba(139, 195, 74, 1)',
+                    'rgba(251, 192, 45, 1)',
+                    'rgba(255, 152, 0, 1)',
+                ],
+                borderWidth: 2,
+                borderRadius: 8,
+                borderSkipped: false,
             }]
         },
         options: {
             responsive: true,
+            plugins: {
+                legend: { display: false },
+            },
             scales: {
                 y: {
-                    beginAtZero: true
+                    beginAtZero: true,
+                    grid: { color: 'rgba(0,0,0,0.04)' },
+                    ticks: { font: { family: 'Outfit' } }
+                },
+                x: {
+                    grid: { display: false },
+                    ticks: { font: { family: 'Outfit', weight: 500 } }
                 }
             }
         }

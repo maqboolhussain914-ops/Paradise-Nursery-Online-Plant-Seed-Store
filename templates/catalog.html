@@ -1,14 +1,15 @@
 {% extends 'base.html' %}
+{% block title %}Plant Catalog – Paradise Nursery{% endblock %}
 
 {% block content %}
-<div class="page-header" style="background: linear-gradient(rgba(46, 125, 50, 0.8), rgba(0, 80, 5, 0.8)), url('https://images.unsplash.com/photo-1416879598555-27a3c3e2db78?w=1600&q=80') center/cover; padding: 4rem 2rem; text-align: center; color: white; margin-bottom: 2rem;">
-    <h1 style="font-size: 3rem; margin-bottom: 1rem; color: white;">Our Plant Catalog</h1>
-    <p style="font-size: 1.2rem; opacity: 0.9;">Find the perfect addition to your home or garden</p>
+<div class="page-header" style="background: linear-gradient(160deg, rgba(46,125,50,0.85), rgba(0,80,5,0.85)), url('https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=1600&q=80') center/cover; padding: 5rem 2rem; text-align: center; color: white; margin-bottom: 2rem; position: relative; overflow: hidden;">
+    <h1 style="font-size: 2.8rem; margin-bottom: 0.8rem; color: white; font-weight: 800; letter-spacing: -0.5px; position: relative; z-index: 1;">Our Plant Catalog</h1>
+    <p style="font-size: 1.1rem; opacity: 0.9; font-weight: 300; position: relative; z-index: 1;">Find the perfect addition to your home or garden</p>
 </div>
 
-<section class="container" style="padding-top: 1rem;">
-    <div class="category-filter">
-        <a href="{{ url_for('catalog') }}" class="filter-btn {% if not active_category %}active{% endif %}">All</a>
+<section class="container" style="padding-top: 1rem;" id="catalog-section">
+    <div class="category-filter" id="category-filter">
+        <a href="{{ url_for('catalog') }}" class="filter-btn {% if not active_category %}active{% endif %}">All Plants</a>
         {% for cat in categories %}
             <a href="{{ url_for('catalog', category_id=cat.category_id) }}" class="filter-btn {% if active_category == cat.category_id|string %}active{% endif %}">
                 {{ cat.category_name }}
@@ -16,25 +17,28 @@
         {% endfor %}
     </div>
 
-    <div class="product-grid">
+    <div class="product-grid" id="product-grid">
         {% for product in products %}
-        <div class="product-card">
+        <div class="product-card" id="catalog-product-{{ product.product_id }}">
             <div class="product-img" style="background-image: url('{{ product.image_url if product.image_url and 'http' in product.image_url else 'https://images.unsplash.com/photo-1463936575829-25148e1db1b8?w=800&q=80' }}'); background-size: cover; background-position: center;"></div>
             <div class="product-info">
                 <div class="product-category">{{ product.category_name }}</div>
                 <h3 class="product-title">{{ product.name }}</h3>
-                <div class="product-price">${{ product.price }}</div>
+                <div class="product-price">${{ "%.2f"|format(product.price) }}</div>
                 <div class="product-actions">
-                    <a href="{{ url_for('product', product_id=product.product_id) }}" class="btn btn-outline">View Details</a>
+                    <a href="{{ url_for('product', product_id=product.product_id) }}" class="btn btn-outline" style="font-size: 0.85rem; padding: 0.5rem 1.2rem;">View Details</a>
                     <form action="{{ url_for('add_to_cart', product_id=product.product_id) }}" method="POST" style="display:inline;">
                         <input type="hidden" name="quantity" value="1">
-                        <button type="submit" class="btn btn-primary">+</button>
+                        <button type="submit" class="btn btn-primary" style="padding: 0.5rem 1rem; font-size: 1rem;">+</button>
                     </form>
                 </div>
             </div>
         </div>
         {% else %}
-        <p style="text-align:center; width: 100%;">No products found in this category.</p>
+        <div style="text-align:center; width: 100%; padding: 4rem; color: var(--text-secondary);">
+            <div style="font-size: 3rem; margin-bottom: 1rem;">🌿</div>
+            <p style="font-size: 1.1rem;">No products found in this category.</p>
+        </div>
         {% endfor %}
     </div>
 </section>

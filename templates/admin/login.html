@@ -1,22 +1,29 @@
 {% extends 'admin/base.html' %}
 
 {% block login_content %}
-<div style="min-height: 100vh; display: flex; align-items: center; justify-content: center; background: var(--bg-color);">
-    <div style="background: white; padding: 3rem; border-radius: 20px; box-shadow: var(--shadow-lg); width: 100%; max-width: 400px; text-align: center;">
-        <h2 style="color: var(--primary-dark); margin-bottom: 2rem;">Admin Login</h2>
-        <form method="POST" action="{{ url_for('admin_login') }}">
+<div style="min-height: 100vh; display: flex; align-items: center; justify-content: center; background: linear-gradient(160deg, #f0f7f0 0%, #e8f5e9 50%, #c8e6c9 100%); position: relative; overflow: hidden;">
+    <!-- Decorative background -->
+    <div style="position: absolute; width: 300px; height: 300px; background: rgba(46,125,50,0.06); border-radius: 50%; top: -80px; right: -80px;"></div>
+    <div style="position: absolute; width: 200px; height: 200px; background: rgba(46,125,50,0.04); border-radius: 50%; bottom: -60px; left: -60px;"></div>
+
+    <div style="background: white; padding: 3rem; border-radius: var(--radius-xl); box-shadow: var(--shadow-lg); width: 100%; max-width: 420px; text-align: center; border: 1px solid var(--border-color); position: relative; z-index: 1; animation: pageFadeIn 0.5s ease-out;">
+        <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">🌿</div>
+        <h2 style="background: var(--primary-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 0.5rem; font-size: 1.5rem;">Admin Login</h2>
+        <p style="color: var(--text-secondary); margin-bottom: 2rem; font-size: 0.9rem;">Sign in to manage your nursery</p>
+        
+        <form method="POST" action="{{ url_for('admin_login') }}" id="admin-login-form">
             <div class="form-group" style="text-align: left;">
-                <label style="font-weight: 600; color: var(--text-secondary); margin-bottom: 0.5rem; display: block;">Username</label>
-                <input type="text" name="username" class="form-control" required placeholder="Enter admin">
+                <label style="font-weight: 600; color: var(--text-secondary); margin-bottom: 0.5rem; display: block; font-size: 0.85rem;">Username</label>
+                <input type="text" name="username" class="form-control" required placeholder="Enter username" id="admin-username">
             </div>
             <div class="form-group" style="text-align: left; margin-bottom: 2rem;">
-                <label style="font-weight: 600; color: var(--text-secondary); margin-bottom: 0.5rem; display: block;">Password</label>
-                <input type="password" name="password" class="form-control" required placeholder="Enter admin123">
+                <label style="font-weight: 600; color: var(--text-secondary); margin-bottom: 0.5rem; display: block; font-size: 0.85rem;">Password</label>
+                <input type="password" name="password" class="form-control" required placeholder="Enter password" id="admin-password">
             </div>
-            <button type="submit" class="btn btn-primary" style="width: 100%;">Login to Dashboard</button>
+            <button type="submit" class="btn btn-primary" id="admin-login-btn" style="width: 100%; padding: 0.9rem; font-size: 1rem;">Login to Dashboard</button>
         </form>
         <div style="margin-top: 2rem;">
-            <a href="{{ url_for('index') }}" style="color: var(--primary-color);">← Back to Store</a>
+            <a href="{{ url_for('index') }}" style="color: var(--primary-color); font-weight: 500; font-size: 0.9rem;">← Back to Store</a>
         </div>
     </div>
 </div>

@@ -3,42 +3,40 @@
 {% block header %}Customer Orders{% endblock %}
 
 {% block content %}
-<table class="admin-table">
+<table class="admin-table" id="orders-table">
     <thead>
         <tr>
             <th>Order ID</th>
             <th>Date</th>
             <th>Customer</th>
-            <th>Total Amount</th>
+            <th>Total</th>
             <th>Status</th>
         </tr>
     </thead>
     <tbody>
         {% for order in orders %}
-        <tr>
-            <td>#{{ order.order_id }}</td>
-            <td>{{ order.order_date }}</td>
+        <tr id="order-row-{{ order.order_id }}">
+            <td style="font-weight: 700; color: var(--text-secondary);">#{{ order.order_id }}</td>
+            <td style="font-size: 0.9rem;">{{ order.order_date }}</td>
             <td>
-                <div style="font-weight: 500;">{{ order.first_name }} {{ order.last_name }}</div>
-                <div style="font-size: 0.85rem; color: var(--text-secondary);">{{ order.email }}</div>
+                <div style="font-weight: 600; font-size: 0.95rem;">{{ order.first_name }} {{ order.last_name }}</div>
+                <div style="font-size: 0.8rem; color: var(--text-secondary);">{{ order.email }}</div>
             </td>
-            <td style="font-weight: 600;">${{ "%.2f"|format(order.total_amount) }}</td>
+            <td style="font-weight: 700; color: var(--primary-dark);">${{ "%.2f"|format(order.total_amount) }}</td>
             <td>
                 <form action="{{ url_for('admin_update_order_status', order_id=order.order_id) }}" method="POST" style="display:flex; gap:0.5rem; align-items:center;">
-                    <select name="status" class="form-control" style="padding: 0.25rem 0.5rem; width: auto; font-size: 0.9rem;">
-                        <option value="Pending" {% if order.status == 'Pending' %}selected{% endif %}>Pending</option>
-                        <option value="Shipped" {% if order.status == 'Shipped' %}selected{% endif %}>Shipped</option>
-                        <option value="Delivered" {% if order.status == 'Delivered' %}selected{% endif %}>Delivered</option>
-                        <option value="Cancelled" {% if order.status == 'Cancelled' %}selected{% endif %}>Cancelled</option>
+                    <select name="status" class="form-control" style="padding: 0.3rem 0.6rem; width: auto; font-size: 0.85rem; border-radius: 8px;">
+                        <option value="Pending" {% if order.status == 'Pending' %}selected{% endif %}>⏳ Pending</option>
+                        <option value="Shipped" {% if order.status == 'Shipped' %}selected{% endif %}>📦 Shipped</option>
+                        <option value="Delivered" {% if order.status == 'Delivered' %}selected{% endif %}>✅ Delivered</option>
+                        <option value="Cancelled" {% if order.status == 'Cancelled' %}selected{% endif %}>❌ Cancelled</option>
                     </select>
-                    <button type="submit" class="btn btn-primary" style="padding: 0.25rem 0.5rem; font-size: 0.8rem;">Update</button>
+                    <button type="submit" class="btn btn-primary" style="padding: 0.3rem 0.7rem; font-size: 0.8rem;">Update</button>
                 </form>
             </td>
         </tr>
         {% else %}
-        <tr>
-            <td colspan="5" style="text-align: center; padding: 2rem;">No orders found.</td>
-        </tr>
+        <tr><td colspan="5" style="text-align: center; padding: 2rem; color: var(--text-secondary);">No orders found.</td></tr>
         {% endfor %}
     </tbody>
 </table>

@@ -2,23 +2,23 @@
 
 {% block header %}{{ 'Edit Category' if category else 'Add New Category' }}{% endblock %}
 {% block header_actions %}
-<a href="{{ url_for('admin_categories') }}" class="btn btn-outline">Cancel</a>
+<a href="{{ url_for('admin_categories') }}" class="btn btn-outline" style="font-size: 0.85rem;">← Back</a>
 {% endblock %}
 
 {% block content %}
-<div style="background: white; padding: 2rem; border-radius: 15px; box-shadow: var(--shadow-sm); max-width: 600px;">
-    <form method="POST">
+<div style="background: white; padding: 2.5rem; border-radius: var(--radius-md); box-shadow: var(--shadow-sm); border: 1px solid var(--border-color); max-width: 600px;">
+    <form method="POST" id="category-form">
         <div class="form-group">
-            <label style="font-weight: 600; color: var(--text-secondary); margin-bottom: 0.5rem; display: block;">Category Name *</label>
-            <input type="text" name="name" class="form-control" required value="{{ category.category_name if category else '' }}">
+            <label style="font-weight: 600; color: var(--text-secondary); margin-bottom: 0.5rem; display: block; font-size: 0.85rem;">Category Name *</label>
+            <input type="text" name="name" class="form-control" required value="{{ category.category_name if category else '' }}" id="category-name">
         </div>
         
         <div class="form-group">
-            <label style="font-weight: 600; color: var(--text-secondary); margin-bottom: 0.5rem; display: block;">Description</label>
-            <textarea name="description" class="form-control" rows="4">{{ category.description if category else '' }}</textarea>
+            <label style="font-weight: 600; color: var(--text-secondary); margin-bottom: 0.5rem; display: block; font-size: 0.85rem;">Description</label>
+            <textarea name="description" class="form-control" rows="4" id="category-description">{{ category.description if category else '' }}</textarea>
         </div>
         
-        <button type="submit" class="btn btn-primary" style="font-size: 1.1rem; width: 100%;">{{ 'Save Changes' if category else 'Create Category' }}</button>
+        <button type="submit" class="btn btn-primary" id="category-submit" style="font-size: 1rem; width: 100%; padding: 0.9rem;">{{ '💾 Save Changes' if category else '📁 Create Category' }}</button>
     </form>
 </div>
 {% endblock %}

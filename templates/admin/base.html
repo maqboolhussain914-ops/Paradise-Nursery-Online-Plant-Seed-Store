@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Admin - Paradise Nursery{% endblock %}</title>
+    <title>{% block title %}Admin – Paradise Nursery{% endblock %}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
@@ -12,75 +12,155 @@
             min-height: 100vh;
         }
         .sidebar {
-            width: 250px;
-            background: var(--text-primary);
+            width: 260px;
+            background: linear-gradient(180deg, #1a2e1a 0%, #0d1f0d 100%);
             color: white;
-            padding: 2rem;
+            padding: 2rem 1.5rem;
             flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            overflow-y: auto;
         }
         .sidebar-brand {
-            font-size: 1.5rem;
-            font-weight: 700;
+            font-size: 1.4rem;
+            font-weight: 800;
             color: var(--primary-light);
-            margin-bottom: 3rem;
-            display: block;
+            margin-bottom: 2.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
         }
         .sidebar-nav {
             display: flex;
             flex-direction: column;
-            gap: 1rem;
+            gap: 0.4rem;
+            flex: 1;
         }
         .sidebar-nav a {
-            color: #cbd5e1;
-            padding: 0.75rem 1rem;
+            color: rgba(255,255,255,0.6);
+            padding: 0.8rem 1rem;
             border-radius: 10px;
-            transition: all 0.3s;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-weight: 500;
+            font-size: 0.92rem;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
         }
         .sidebar-nav a:hover, .sidebar-nav a.active {
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(96,173,94,0.15);
             color: white;
+            transform: translateX(4px);
+        }
+        .sidebar-nav a.logout-link {
+            margin-top: auto;
+            color: rgba(239,68,68,0.7);
+            border-top: 1px solid rgba(255,255,255,0.06);
+            padding-top: 1.2rem;
+            margin-top: 2rem;
+        }
+        .sidebar-nav a.logout-link:hover {
+            color: #ef4444;
+            background: rgba(239,68,68,0.1);
         }
         .admin-content {
             flex-grow: 1;
-            padding: 2rem 5%;
+            padding: 2rem 3%;
             background: var(--bg-color);
+            min-height: 100vh;
         }
         .admin-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 2rem;
-            padding: 1.5rem 2rem;
+            padding: 1.2rem 1.8rem;
             background: white;
-            border-radius: 15px;
+            border-radius: var(--radius-md);
             box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border-color);
+        }
+        .admin-header h2 {
+            font-size: 1.3rem;
+            font-weight: 700;
         }
         .stat-card {
             background: white;
             padding: 1.5rem;
-            border-radius: 15px;
+            border-radius: var(--radius-md);
             box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border-color);
             flex: 1;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--primary-gradient);
+        }
+        .stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-md);
         }
         .stat-value {
             font-size: 2rem;
-            font-weight: 700;
-            color: var(--primary-dark);
+            font-weight: 800;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
         table.admin-table {
             width: 100%;
             background: white;
-            border-radius: 15px;
+            border-radius: var(--radius-md);
             overflow: hidden;
             border-collapse: collapse;
             box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border-color);
         }
         table.admin-table th, table.admin-table td {
             padding: 1rem 1.5rem;
             text-align: left;
             border-bottom: 1px solid var(--border-color);
         }
-        table.admin-table th { background: #f8fafc; font-weight: 600; }
+        table.admin-table th {
+            background: linear-gradient(135deg, #f0f7f0, #f8faf8);
+            font-weight: 600;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-secondary);
+        }
+        table.admin-table tbody tr {
+            transition: all 0.2s ease;
+        }
+        table.admin-table tbody tr:hover {
+            background: rgba(46,125,50,0.03);
+        }
+        .admin-avatar {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background: var(--primary-gradient);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.85rem;
+        }
     </style>
 </head>
 <body>
@@ -100,12 +180,12 @@
         <aside class="sidebar">
             <a href="{{ url_for('admin_dashboard') }}" class="sidebar-brand">🌿 Admin Panel</a>
             <nav class="sidebar-nav">
-                <a href="{{ url_for('admin_dashboard') }}">Dashboard</a>
-                <a href="{{ url_for('admin_categories') }}">Manage Categories</a>
-                <a href="{{ url_for('admin_products') }}">Manage Products</a>
-                <a href="{{ url_for('admin_orders') }}">View Orders</a>
-                <a href="{{ url_for('index') }}" target="_blank">View Store</a>
-                <a href="{{ url_for('admin_logout') }}" style="color: #ef4444; margin-top: auto;">Logout</a>
+                <a href="{{ url_for('admin_dashboard') }}" id="nav-dashboard">📊 Dashboard</a>
+                <a href="{{ url_for('admin_categories') }}" id="nav-categories">📁 Categories</a>
+                <a href="{{ url_for('admin_products') }}" id="nav-products">🌱 Products</a>
+                <a href="{{ url_for('admin_orders') }}" id="nav-orders">📦 Orders</a>
+                <a href="{{ url_for('index') }}" target="_blank" id="nav-store">🏪 View Store</a>
+                <a href="{{ url_for('admin_logout') }}" class="logout-link" id="nav-logout">🚪 Logout</a>
             </nav>
         </aside>
         <main class="admin-content">
@@ -114,19 +194,16 @@
                 <div style="display: flex; align-items: center; gap: 1rem;">
                     {% block header_actions %}{% endblock %}
                     
-                    <div style="display: flex; align-items: center; gap: 0.5rem; border-left: 1px solid var(--border-color); padding-left: 1rem; margin-left: 1rem;">
-                        <div style="width: 35px; height: 35px; border-radius: 50%; background: var(--primary-light); color: white; display: flex; align-items: center; justify-content: center; font-weight: bold;">
-                            A
-                        </div>
-                        <span style="font-weight: 600; color: var(--text-primary);">Admin User</span>
+                    <div style="display: flex; align-items: center; gap: 0.6rem; border-left: 1px solid var(--border-color); padding-left: 1rem; margin-left: 0.5rem;">
+                        <div class="admin-avatar">A</div>
+                        <span style="font-weight: 600; color: var(--text-primary); font-size: 0.9rem;">Admin</span>
                     </div>
 
-                    <!-- 3-Dot Toggle Menu -->
                     <div class="dropdown">
-                        <button class="kebab-menu" style="background: var(--bg-color); width: 40px; height: 40px;">⋮</button>
+                        <button class="kebab-menu" id="admin-kebab">⋮</button>
                         <div class="dropdown-content">
-                            <a href="{{ url_for('index') }}">View Store Dashboard</a>
-                            <a href="{{ url_for('admin_logout') }}">Logout Admin</a>
+                            <a href="{{ url_for('index') }}">🏪 View Store</a>
+                            <a href="{{ url_for('admin_logout') }}">🚪 Logout</a>
                         </div>
                     </div>
                 </div>
