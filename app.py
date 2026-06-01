@@ -118,6 +118,81 @@ def clear_cart():
     return redirect(url_for('cart'))
 
 
+# ─── Checkout Routes ───
+
+@app.route('/checkout', methods=['GET', 'POST'])
+def checkout():
+    """Handle the checkout process."""
+    cart_items = session.get('cart', {})
+    if not cart_items:
+        flash("Your cart is empty. Please add some items before checking out.", "error")
+        return redirect(url_for('cart'))
+
+    # Calculate total and build detailed cart
+    detailed_cart = []
+    total = 0
+    for pid, qty in cart_items.items():
+        p = db.get_product_by_id(pid)
+        if p:
+            subtotal = float(p['price']) * qty
+            total += subtotal
+            detailed_cart.append({
+                'product': p,
+                'quantity': qty,
+                'subtotal': subtotal
+            })
+
+    if request.method == 'POST':
+        # Process checkout form
+        first_name = request.form.get('first_name', '').strip()
+        last_name = request.form.get('last_name', '').strip()
+        email = request.form.get('email', '').strip()
+        phone = request.form.get('phone', '').strip()
+        street_address = request.form.get('street_address', '').strip()
+        city = request.form.get('city', '').strip()
+        state = request.form.get('state', '').strip()
+        zip_code = request.form.get('zip_code', '').strip()
+        
+        full_address = f"{street_address}, {city}, {state} {zip_code}"
+        
+        # Validation
+        if not all([first_name, last_name, email, street_address, city, state, zip_code]):
+            flash("Please fill in all required fields.", "error")
+            return render_template('checkout.html', cart_items=detailed_cart, total=total)
+
+        # 1. Get or create user
+        user_id = db.get_or_create_user(first_name, last_name, email, phone, street_address, city, state, zip_code)
+        if not user_id:
+            flash("An error occurred while processing your user information. Please try again.", "error")
+            return render_template('checkout.html', cart_items=detailed_cart, total=total)
+
+        # 2. Create order
+        order_id = db.create_order(user_id, detailed_cart, total, full_address)
+        if not order_id:
+            flash("An error occurred while creating your order. Please try again.", "error")
+            return render_template('checkout.html', cart_items=detailed_cart, total=total)
+
+        # 3. Clear cart
+        session.pop('cart', None)
+        
+        # 4. Redirect to success page
+        flash("Order placed successfully!", "success")
+        return redirect(url_for('checkout_success', order_id=order_id))
+
+    return render_template('checkout.html', cart_items=detailed_cart, total=total)
+
+
+@app.route('/checkout/success/<int:order_id>')
+def checkout_success(order_id):
+    """Show the order success page with transparent data flow."""
+    order = db.get_order_with_items(order_id)
+    if not order:
+        flash("Order not found.", "error")
+        return redirect(url_for('index'))
+        
+    return render_template('checkout_success.html', order=order)
+
+
 # ─── Admin Auth ───
 
 def admin_required(f):

@@ -56,7 +56,7 @@
                     <span>Total</span>
                     <span class="product-price">${{ "%.2f"|format(total) }}</span>
                 </div>
-                <button class="btn btn-primary" id="checkout-btn" style="width: 100%; font-size: 1rem; padding: 0.9rem; margin-bottom: 0.8rem;">Proceed to Checkout</button>
+                <a href="{{ url_for('checkout') }}" class="btn btn-primary" id="checkout-btn" style="width: 100%; font-size: 1rem; padding: 0.9rem; margin-bottom: 0.8rem; display: inline-block; text-align: center;">Proceed to Checkout</a>
                 <form action="{{ url_for('clear_cart') }}" method="POST">
                     <button type="submit" class="btn btn-outline" id="clear-cart-btn" style="width: 100%; font-size: 0.9rem; padding: 0.7rem;">Clear Cart</button>
                 </form>

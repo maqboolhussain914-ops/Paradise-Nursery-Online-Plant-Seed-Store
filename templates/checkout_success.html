@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+{% block title %}Order Confirmed – Paradise Nursery{% endblock %}
+
+{% block content %}
+<section class="container" id="success-page" style="max-width: 800px; margin: 0 auto; padding-top: 3rem;">
+    <div style="text-align: center; margin-bottom: 3rem;">
+        <div style="font-size: 5rem; margin-bottom: 1rem; color: var(--primary-color);">✅</div>
+        <h1 style="font-size: 2.5rem; color: var(--primary-dark); margin-bottom: 0.5rem;">Thank You For Your Order!</h1>
+        <p style="color: var(--text-secondary); font-size: 1.1rem;">Your beautiful plants will be on their way soon.</p>
+    </div>
+
+    <div style="background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(10px); padding: 2.5rem; border-radius: 16px; box-shadow: var(--shadow-md);">
+        
+        <div style="display: flex; justify-content: space-between; border-bottom: 2px solid var(--border-color); padding-bottom: 1.5rem; margin-bottom: 1.5rem;">
+            <div>
+                <h3 style="color: var(--text-secondary); font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.3rem;">Order Number</h3>
+                <div style="font-size: 1.2rem; font-weight: 700; color: var(--primary-dark);">#{{ order.order_id }}</div>
+            </div>
+            <div style="text-align: right;">
+                <h3 style="color: var(--text-secondary); font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.3rem;">Date</h3>
+                <div style="font-size: 1.1rem; font-weight: 600;">{{ order.order_date.strftime('%b %d, %Y') if order.order_date else 'Today' }}</div>
+            </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 2.5rem;">
+            <div>
+                <h3 style="color: var(--primary-dark); margin-bottom: 1rem; font-size: 1.1rem;">Customer Details</h3>
+                <p style="margin-bottom: 0.3rem; font-weight: 600;">{{ order.user.first_name }} {{ order.user.last_name }}</p>
+                <p style="color: var(--text-secondary); margin-bottom: 0.3rem;">{{ order.user.email }}</p>
+            </div>
+            <div>
+                <h3 style="color: var(--primary-dark); margin-bottom: 1rem; font-size: 1.1rem;">Shipping Address</h3>
+                <p style="line-height: 1.5; color: var(--text-secondary);">
+                    {{ order.shipping_address }}
+                </p>
+            </div>
+        </div>
+
+        <h3 style="color: var(--primary-dark); margin-bottom: 1rem; font-size: 1.1rem; border-bottom: 2px solid var(--border-color); padding-bottom: 0.5rem;">Order Items</h3>
+        
+        <div style="margin-bottom: 2rem;">
+            <table style="width: 100%; border-collapse: collapse;">
+                <thead>
+                    <tr style="border-bottom: 1px solid var(--border-color); color: var(--text-secondary); text-align: left;">
+                        <th style="padding: 0.8rem 0; font-weight: 600;">Product</th>
+                        <th style="padding: 0.8rem 0; font-weight: 600; text-align: center;">Qty</th>
+                        <th style="padding: 0.8rem 0; font-weight: 600; text-align: right;">Price</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in order.items %}
+                    <tr style="border-bottom: 1px solid rgba(0,0,0,0.05);">
+                        <td style="padding: 1rem 0; display: flex; align-items: center; gap: 1rem;">
+                            <div style="width: 48px; height: 48px; background-image: url('{{ item.image_url if item.image_url and 'http' in item.image_url else 'https://images.unsplash.com/photo-1463936575829-25148e1db1b8?w=800&q=80' }}'); background-size: cover; background-position: center; border-radius: 8px;"></div>
+                            <span style="font-weight: 600;">{{ item.name }}</span>
+                        </td>
+                        <td style="padding: 1rem 0; text-align: center; font-weight: 600; color: var(--text-secondary);">{{ item.quantity }}</td>
+                        <td style="padding: 1rem 0; text-align: right; font-weight: 600;">${{ "%.2f"|format(item.price_at_purchase * item.quantity) }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <div style="display: flex; justify-content: flex-end;">
+            <div style="width: 300px;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.8rem; color: var(--text-secondary);">
+                    <span>Subtotal</span>
+                    <span style="font-weight: 600;">${{ "%.2f"|format(order.total_amount) }}</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.8rem; color: var(--text-secondary);">
+                    <span>Shipping</span>
+                    <span style="color: var(--primary-color); font-weight: 600;">Free</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; margin-top: 1rem; padding-top: 1rem; border-top: 2px solid var(--border-color); font-size: 1.4rem; font-weight: 800;">
+                    <span>Total Paid</span>
+                    <span class="product-price">${{ "%.2f"|format(order.total_amount) }}</span>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div style="text-align: center; margin-top: 3rem; margin-bottom: 5rem;">
+        <a href="{{ url_for('catalog') }}" class="btn btn-outline" style="padding: 0.8rem 2rem;">Continue Shopping</a>
+    </div>
+
+</section>
+{% endblock %}

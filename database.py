@@ -225,6 +225,103 @@ def delete_category(category_id):
         return False
 
 
+# ─── STOREFRONT: Checkout Operations ───
+
+def get_or_create_user(first_name, last_name, email, phone, street_address, city, state, zip_code):
+    """Finds a user by email or creates a new one if they don't exist."""
+    try:
+        with get_db_cursor(dictionary=True) as (conn, cursor):
+            cursor.execute("SELECT user_id FROM users WHERE email = %s", (email,))
+            user = cursor.fetchone()
+            if user:
+                return user['user_id']
+            
+            # Create new user
+            cursor.execute("SELECT COALESCE(MAX(user_id), 0) + 1 FROM users")
+            next_id = cursor.fetchone()['COALESCE(MAX(user_id), 0) + 1']
+            
+            # Using a default hash for guest users
+            cursor.execute(
+                "INSERT INTO users (user_id, first_name, last_name, email, password_hash, phone, street_address, city, state, zip_code) "
+                "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
+                (next_id, first_name, last_name, email, 'guest_account', phone, street_address, city, state, zip_code)
+            )
+            conn.commit()
+            return next_id
+    except Error as e:
+        print(f"[DB ERROR] get_or_create_user: {e}")
+        return None
+
+
+def create_order(user_id, cart_items, total_amount, shipping_address):
+    """Creates an order, adds order items, and deducts stock inside a transaction."""
+    try:
+        with get_db_cursor() as (conn, cursor):
+            # 1. Create Order
+            cursor.execute("SELECT COALESCE(MAX(order_id), 0) + 1 FROM orders")
+            order_id = cursor.fetchone()[0]
+            
+            cursor.execute(
+                "INSERT INTO orders (order_id, user_id, total_amount, status, shipping_address) "
+                "VALUES (%s, %s, %s, %s, %s)",
+                (order_id, user_id, total_amount, 'Pending', shipping_address)
+            )
+            
+            # 2. Add Order Items & Deduct Stock
+            cursor.execute("SELECT COALESCE(MAX(order_item_id), 0) FROM order_items")
+            last_item_id = cursor.fetchone()[0]
+            
+            for item in cart_items:
+                product = item['product']
+                qty = item['quantity']
+                price = product['price']
+                last_item_id += 1
+                
+                # Insert order item
+                cursor.execute(
+                    "INSERT INTO order_items (order_item_id, order_id, product_id, quantity, price_at_purchase) "
+                    "VALUES (%s, %s, %s, %s, %s)",
+                    (last_item_id, order_id, product['product_id'], qty, price)
+                )
+                
+                # Deduct stock
+                cursor.execute(
+                    "UPDATE products SET stock_quantity = stock_quantity - %s WHERE product_id = %s",
+                    (qty, product['product_id'])
+                )
+                
+            conn.commit()
+            return order_id
+    except Error as e:
+        print(f"[DB ERROR] create_order: {e}")
+        # conn.rollback() is handled by context manager if exception is raised, 
+        # but since we catch it here, we should rollback manually just in case
+        return None
+
+def get_order_with_items(order_id):
+    """Fetch an order and its items for the success page."""
+    try:
+        with get_db_cursor(dictionary=True) as (conn, cursor):
+            cursor.execute("SELECT * FROM orders WHERE order_id = %s", (order_id,))
+            order = cursor.fetchone()
+            
+            if order:
+                cursor.execute(
+                    "SELECT oi.*, p.name, p.image_url FROM order_items oi "
+                    "JOIN products p ON oi.product_id = p.product_id "
+                    "WHERE oi.order_id = %s",
+                    (order_id,)
+                )
+                order['items'] = cursor.fetchall()
+                
+                cursor.execute("SELECT first_name, last_name, email FROM users WHERE user_id = %s", (order['user_id'],))
+                order['user'] = cursor.fetchone()
+                
+            return order
+    except Error as e:
+        print(f"[DB ERROR] get_order_with_items: {e}")
+        return None
+
 # ─── ADMIN: Dashboard Analytics ───
 
 def get_dashboard_stats():
