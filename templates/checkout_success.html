@@ -48,7 +48,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for item in order.items %}
+                    {% for item in order['items'] %}
                     <tr style="border-bottom: 1px solid rgba(0,0,0,0.05);">
                         <td style="padding: 1rem 0; display: flex; align-items: center; gap: 1rem;">
                             <div style="width: 48px; height: 48px; background-image: url('{{ item.image_url if item.image_url and 'http' in item.image_url else 'https://images.unsplash.com/photo-1463936575829-25148e1db1b8?w=800&q=80' }}'); background-size: cover; background-position: center; border-radius: 8px;"></div>
